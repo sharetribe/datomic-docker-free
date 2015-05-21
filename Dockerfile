@@ -15,4 +15,10 @@ RUN ["mkdir", "/temp"]
 RUN ["wget", "-O", "/temp/datomic.zip", "https://my.datomic.com/downloads/free/0.9.5173"]
 RUN ["unzip", "-u", "/temp/datomic.zip", "-d", "/temp"]
 
+# Copy Datomic to correct directory
 RUN ["cp", "-r", "/temp/datomic-free-0.9.5173/", "/opt/datomic/"]
+
+# Remove unneccessary files
+RUN ["rm", "-rf", "/temp/"]
+
+CMD ["/opt/datomic/bin/transactor", "/opt/datomic/config/transactor.properties"]
