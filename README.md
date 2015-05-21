@@ -4,6 +4,10 @@
 
 Copy transactor.properties.example to a path from where it will be mounted as volume to persistence container. Rename it to transactor.properties and configure as liked.
 
+Remember to configure `host` and `alt-host` options. Binding `host` to `0.0.0.0` ensures that the transactor listens all connections. If using boot2docker, binding `alt-host` to boot2docker ip is required. The ip can be found out with
+
+    boot2docker ip
+
 ## To build the image
     docker build -t datomic-free .
 
