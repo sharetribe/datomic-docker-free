@@ -51,7 +51,7 @@ object-cache-max=128m
 data-dir=/var/datomic/data
 
 # Transactor will log here, see bin/logback.xml to configure logging.
-log-dir=/var/datomichlog
+log-dir=/var/datomic/log
 
 # Transactor will write process pid here on startup
 # pid-file=transactor.pid
