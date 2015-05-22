@@ -21,4 +21,8 @@ RUN ["cp", "-r", "/temp/datomic-free-0.9.5173/", "/opt/datomic/"]
 # Remove unneccessary files
 RUN ["rm", "-rf", "/temp/"]
 
-CMD ["/opt/datomic/bin/transactor", "/opt/datomic/config/transactor.properties"]
+# Copy default startup script
+COPY ["files/startup.sh", "/opt/datomic/startup/startup.sh"]
+RUN ["chmod", "700", "/opt/datomic/startup/startup.sh"]
+
+CMD ["/opt/datomic/startup/startup.sh"]
