@@ -2,11 +2,9 @@
 
 ## Preparations
 
-Copy transactor.properties.example to a path from where it will be mounted as volume to persistence container. Rename it to transactor.properties and configure as liked.
+A startup.sh script is required for dynamically generating the datomic transactor.properties file. A default one for running the Datomic container in ECS is provided under `files/`, and that is copied when building the image to `/opt/datomic/startup/startup.sh` inside the image.
 
-Remember to configure `host` and `alt-host` options. Binding `host` to `0.0.0.0` ensures that the transactor listens all connections. If using boot2docker, binding `alt-host` to boot2docker ip is required. The ip can be found out with
-
-    boot2docker ip
+That can be overridden by providing a modified one. An example of the file is in `dev_startup`. This file currently enbales passing in the `HOST` and `ALT_HOST` env variables which will be used to create configuration for Datomic. The default configuration is then overriden by providing the local folder containing the scirpt to the container as volume with `-v dev_startup/:/opt/datomic/startup/`.
 
 ## To build the image
     docker build -t datomic-free .
@@ -15,8 +13,8 @@ Remember to configure `host` and `alt-host` options. Binding `host` to `0.0.0.0`
 
 On OS X, the paths need to be under /User/, for boot2docker access.
 
-    docker run -d --name db-persistence -v <path_to_config>:/opt/datomic/config/ -v <path-to-data>:/var/datomic/data -v <path-to-logs>:/var/datomic/logs /bin/true
-    docker run -d --expose 4334 --expose 4335 --expose 4336 -p 4334:4334 -p 4335:4335 -p 4336:4336 --name db --volumes-from db-persistence datomic-free
+    docker run -d --name db-persistence -v </User/path/>/dev_startup/:/opt/datomic/config/ -v </User/path/to/data>:/var/datomic/data -v </User/path/to/logs>:/var/datomic/logs /bin/true
+    docker run -d --expose 4334 --expose 4335 --expose 4336 -p 4334:4334 -p 4335:4335 -p 4336:4336 -e "HOST=0.0.0.0" -e "ALT_HOST=$(boot2docker ip)" --name db --volumes-from db-persistence datomic-free
 
 ## Removing the containers
     docker rm -v db-persistence
