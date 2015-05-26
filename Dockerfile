@@ -25,4 +25,4 @@ RUN ["rm", "-rf", "/temp/"]
 COPY ["files/startup.sh", "/opt/datomic/startup/startup.sh"]
 RUN ["chmod", "700", "/opt/datomic/startup/startup.sh"]
 
-CMD ["/opt/datomic/startup/startup.sh"]
+CMD "/opt/datomic/startup/startup.sh"

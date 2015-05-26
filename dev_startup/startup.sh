@@ -5,6 +5,17 @@
 HOST=$HOST
 ALT_HOST=$ALT_HOST
 
+# default opts for jvm
+if [ "$XMX" == "" ]; then
+    XMX=-Xmx1g
+fi
+if [ "$XMS" == "" ]; then
+    XMS=-Xms1g
+fi
+if [ "$JAVA_OPTS"  == "" ]; then
+    JAVA_OPTS='-XX:+UseG1GC -XX:MaxGCPauseMillis=50'
+fi
+
 # Create properties file dynamically
 
 cat > /opt/datomic/config/transactor.properties <<EOF
@@ -36,8 +47,8 @@ alt-host=$ALT_HOST
 
 # Recommended settings for -Xmx1g usage, e.g. dev laptops.
 memory-index-threshold=32m
-memory-index-max=256m
-object-cache-max=128m
+memory-index-max=64m
+object-cache-max=32m
 
 ## OPTIONAL ####################################################
 
@@ -73,5 +84,5 @@ log-dir=/var/datomic/log
 EOF
 
 # Start transactor with config
-
-/opt/datomic/bin/transactor /opt/datomic/config/transactor.properties
+echo "Running transactor startup with $XMS $XMX $JAVA_OPTS"
+/opt/datomic/bin/transactor $XMX $XMS $JAVA_OPTS /opt/datomic/config/transactor.properties
